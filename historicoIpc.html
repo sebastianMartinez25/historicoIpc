@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>historico IPC | Growcop</title>
+    <link rel="shortcut icon" href="logoGrowcop.png">
+    <link rel="stylesheet" href="historicoIpc.css">
+    
+</head>
+<body>
+    <h1>CALCULADORA VALOR DEL DINERO EN EL TIEMPO</h1>
+    <div id="app">
+<h3>HISTÓRICO IPC EN COLOMBIA</h3>
+
+<table>
+<thead>
+<tr>
+<th>Año</th>
+<th>Mes</th>
+<th>Ipc Mensual (%)</th>
+<th>Ipc Anual (%)</th>
+<th>Ipc Año Corrido (%)</th>
+
+</tr>
+</thead>
+<tbody>
+<tr v-for="lista in listaDatos">
+<td>{{lista[0]}}</td>
+<td>{{lista[1]}}</td>
+<td>{{lista[2]}}</td>
+<td>{{lista[3]}}</td>
+<td>{{lista[4]}}</td>
+
+</tr>
+</tbody>
+</table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="historicoIpc.js"></script>
+</body>
+</html>
