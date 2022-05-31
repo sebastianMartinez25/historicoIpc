@@ -24,7 +24,7 @@ getLista(){
 .then((lista)=>{
   return lista.json()
 }).then((valores)=>{
-  this.listaDatos = valores.values
+  this.listaDatos = valores.values.reverse();
 }).catch(err=>{
   console.log(err);
 })
