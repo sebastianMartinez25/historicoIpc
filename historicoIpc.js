@@ -26,6 +26,7 @@ getLista(){
 }).then((valores)=>{
   this.listaDatos = valores.values.reverse();
   //CODIGO NUEVO
+  //CODIGO DE DATOS O MENSAJE ACTUAL DEL IPC
 var filaInicial=0;
 var valorAño=(this.listaDatos[filaInicial][0]);
 var valorMes=(this.listaDatos[filaInicial][1]).toLowerCase();
@@ -37,6 +38,32 @@ var mensaje =document.createTextNode("En " + valorMes + " de " + valorAño + ", 
 + valorIpcMensual + "%," + " la variación año corrido fue " + valorIpcCorrido +"%, y la anual fue "
 + valorIpcAnual +"%.");
 datosActuales.appendChild(mensaje);
+//FIN DE CODIGO DE DATOS O MENSAJE ACTUAL DEL IPC
+//INICIO DE CODIGO VALOR DEL DINERO EN EL TIEMPO
+var añoInicial=document.getElementById("añoInicial");
+var totalFilas=(this.listaDatos.length)-1;
+var valorAñoAbajo=(this.listaDatos[totalFilas][0]);
+var iteraciones=(valorAño-valorAñoAbajo);
+
+var i;
+var listaDeAños=parseInt(valorAñoAbajo);
+for(i=0;i<=iteraciones;i++)
+{
+  var opcion=document.createElement("option");
+  opcion.value=listaDeAños+i;
+  opcion.innerHTML=opcion.value;
+  añoInicial.appendChild(opcion);
+}
+añoInicial.addEventListener("change", mesesIniciaes);
+function mesesIniciaes()
+{
+  var valorSeleccionadoAi=añoInicial.value;
+  var rep;
+  
+}
+
+
+//FIN DE CODIGO VALOR DEL DINERO EN EL TIEMPO
   //FIN CODIGO NUEVO
 }).catch(err=>{
   console.log(err);
