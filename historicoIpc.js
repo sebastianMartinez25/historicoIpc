@@ -44,7 +44,6 @@ var añoInicial=document.getElementById("añoInicial");
 var totalFilas=(this.listaDatos.length)-1;
 var valorAñoAbajo=(this.listaDatos[totalFilas][0]);
 var iteraciones=(valorAño-valorAñoAbajo);
-
 var i;
 var listaDeAños=parseInt(valorAñoAbajo);
 for(i=0;i<=iteraciones;i++)
@@ -54,11 +53,53 @@ for(i=0;i<=iteraciones;i++)
   opcion.innerHTML=opcion.value;
   añoInicial.appendChild(opcion);
 }
-añoInicial.addEventListener("change", mesesIniciaes);
-function mesesIniciaes()
+
+añoInicial.addEventListener("change", mesesIniciales);
+var datosfuncion=this.listaDatos;
+function mesesIniciales()
 {
   var valorSeleccionadoAi=añoInicial.value;
+  var meses=["ENERO","FEBRERO","MARZO","ABRIL","MAYO","JUNIO","JULIO","AGOSTO","SEPTIEMBRE","OCTUBRE","NOVIEMBRE","DICIEMBRE"];
   var rep;
+  var mesInicial=document.getElementById("mesInicial");
+ 
+  var cuentan=mesInicial.childElementCount;
+  
+      while (mesInicial.firstChild)
+      {
+      mesInicial.removeChild(mesInicial.firstChild);
+      }
+  if(valorSeleccionadoAi==valorAño)
+  {
+    for(rep=0;rep<=12;rep++)
+    {
+      var añoIterado=(datosfuncion[rep][0]);
+      if(añoIterado==valorAño)
+      {
+        var opcion1=document.createElement("option");
+        opcion1.value=meses[rep];
+        opcion1.innerHTML=opcion1.value;
+        mesInicial.appendChild(opcion1);
+      }
+      else
+      {
+        break;
+      }
+    }
+    
+
+  }
+  else
+  {
+    for(rep=0;rep<=11;rep++)
+    {
+        var opcion1=document.createElement("option");
+        opcion1.value=meses[rep];
+        opcion1.innerHTML=opcion1.value;
+        mesInicial.appendChild(opcion1);
+      
+    }
+  }
   
 }
 
