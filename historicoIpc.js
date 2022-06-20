@@ -103,7 +103,74 @@ function mesesIniciales()
   
 }
 
+var montoInicial=document.getElementById("montoInicial");
+montoInicial.addEventListener("keypress",validarDigito);
+montoInicial.addEventListener("paste",validarDigito2);
+ 
+function validarDigito(e)
+{
+        const regex=/^[\d]+$/;
+        var caracter=e.key; //.which;
+        if (regex.test(caracter))
+        {       
+        }
+        else
+        {
+            e.preventDefault();   
+        }
+}
+function validarDigito2(p)
+{
+  //almacenar en una variable lo que se esta pegando, es decir
+  //almacena lo que está en el portapapeles
+  var portapapeles=p.clipboardData.getData("text/plain");
+  //fin
+  var puntos=portapapeles.indexOf(".");
+  var comas=portapapeles.indexOf(",");
+  var digitos=/^[\d]+$/;
+  
+  if(puntos>=0){
+    portapapeles=portapapeles.split(".").join("");
+  }
+  if(comas>=0){
+    portapapeles=portapapeles.split(",").join("");
+  }
+  portapapeles=parseInt(portapapeles);
+  if(digitos.test(portapapeles))
+  {
+    p.preventDefault();
+    var cadenaNumeros=String(portapapeles).split('');
+    const longitudCadenaNum=cadenaNumeros.length;
+    if(longitudCadenaNum<=3)
+    {
+    
+    }
+    else{
+      var numeroDePuntos=Math.trunc(longitudCadenaNum/3);
+      var i;
+      var posicion;
+      for(i=1;i<=numeroDePuntos;i++)
+      {
+       posicion=longitudCadenaNum-(3*i);
+       if(posicion<=0)
+       {
+        break;
+       }
+       cadenaNumeros.splice(posicion,0,"."); 
+      }
+      portapapeles=cadenaNumeros.join("");      
+    }
+    montoInicial.value=portapapeles;
 
+  }
+  else{
+    p.preventDefault();
+  }
+  
+
+ //console.log(p.clipboardData.getData("text/plain"));
+
+}
 //FIN DE CODIGO VALOR DEL DINERO EN EL TIEMPO
   //FIN CODIGO NUEVO
 }).catch(err=>{
