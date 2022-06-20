@@ -220,7 +220,8 @@ else{
 }
   }
   else{
-    p.preventDefault();
+    
+    //p.preventDefault();
   }
 }
 
