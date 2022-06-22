@@ -272,6 +272,29 @@ function validarDigito3(evt)
 }
 //FIN DE CODIGO VALOR DEL DINERO EN EL TIEMPO
   //FIN CODIGO NUEVO
+  //CONDICIONALES PARA LIQUIDAR VALOR DEL DINERO EN EL TIEMPO
+  var boton=document.getElementById("boton");
+  boton.addEventListener("click",ejecutarCalculo);
+  function ejecutarCalculo()
+  {
+    
+    var aI=añoInicial.value;
+    var mI=mesInicial.value;
+    var aF=añoFinal.value;
+    var mF=mesFinal.value;
+    var mtoI=montoInicial.value;
+    var mtoF=montoFinal.value;
+
+    //CONDICION PARA QUE FUNCIONE EL CALCULO
+    if(aI!="" && mI!="" && aF!="" && mF!=""&& (mtoI>0 ^ mtoF>0))
+    {
+     //CONDICION PARA VALOR FUTURO
+     console.log(mesInicial.selectedIndex);
+     //CONDICION PARA VALOR PRESENTE
+    }
+    else{}
+
+  }
 }).catch(err=>{
   console.log(err);
 })
