@@ -282,18 +282,102 @@ function validarDigito3(evt)
     var mI=mesInicial.value;
     var aF=añoFinal.value;
     var mF=mesFinal.value;
-    var mtoI=montoInicial.value;
-    var mtoF=montoFinal.value;
-
-    //CONDICION PARA QUE FUNCIONE EL CALCULO
+    var mtoI=montoInicial.value.split(".").join("");
+    var cmaMtoI=mtoI.indexOf(",");
+    if (cmaMtoI>=0)
+    {
+      mtoI=mtoI.replace(",",".");
+    }
+   mtoI=parseFloat(mtoI);
+    var mtoF=montoFinal.value.split(".").join("");
+    var cmaMtoF=mtoF.indexOf(",");
+    if(cmaMtoF>=0)
+    {
+      mtoF=mtoF.replace(",",".");
+    }
+    mtoF=parseFloat(mtoF);
+    //CONDICION PARA QUE FUNCIONE EL CALCULO con XOR
     if(aI!="" && mI!="" && aF!="" && mF!=""&& (mtoI>0 ^ mtoF>0))
     {
+      var vlrmI=mesInicial.selectedIndex;
+      var vlrmF=mesFinal.selectedIndex;
+      var vf;
+      var vp;
+      var ti;
+      var p=1;
+      var ptoI;
+      var ptoF;
+      var iteracion;
+      var iteracion2;
+      var ubicacionCma;
+      var longitudS;
+      var string1;
+      var string2;
+      var vlrFut;
      //CONDICION PARA VALOR FUTURO
-     console.log(mesInicial.selectedIndex);
-     //CONDICION PARA VALOR PRESENTE
-    }
-    else{}
+     if(aI==aF && vlrmI<=vlrmF && mtoI>0 ||(aI<aF && mtoI>0))
+     {
+      vlrFut=1;
+      calculoFinal();
+     }
+          //CONDICION PARA VALOR PRESENTE
+     if (aI==aF && vlrmI<=vlrmF && mtoF>0 ||(aI<aF && mtoF>0))
+     {
+      vlrFut=0;
+      calculoFinal();
+     }
+     
 
+    }
+    else{
+      alert("no se hizo nada, coloque correctamente los valores")
+    }
+
+    function calculoFinal()
+    {
+      for(iteracion=0;iteracion<=totalFilas;iteracion++)
+      {
+        if(aF==datosfuncion[iteracion][0]&&mF==datosfuncion[iteracion][1])
+        {
+          ptoF=iteracion;
+        }
+        if(aI==datosfuncion[iteracion][0]&&mI==datosfuncion[iteracion][1])
+        {
+          ptoI=iteracion;
+        }
+      }
+      for(iteracion2=ptoI;iteracion2>=ptoF;iteracion2--)
+      {
+        
+        ti=datosfuncion[iteracion2][2];
+        ti=parseFloat((ti.replace(",",".")))/100;
+
+        if (vlrFut==1)
+        {
+        vf=mtoI*(1+ti)**p;
+       mtoI=vf;
+        }
+        else{
+          vf=mtoF/(1+ti)**p;
+       mtoF=vf;
+        }
+       
+      }
+      vf=(vf.toFixed(3)).replace(".",",");
+      ubicacionCma=vf.indexOf(",");
+      longitudS=vf.length;
+      string1=vf.substring(0,ubicacionCma);
+      string1=new Intl.NumberFormat('en-EN').format(string1).replace(/,/g,".");
+      string2=vf.substring(ubicacionCma,longitudS);
+      if (vlrFut==1)
+      {
+        montoFinal.value=string1+string2;
+      }
+      else{
+        montoInicial.value=string1+string2;
+      }
+      
+    }
   }
 }).catch(err=>{
   console.log(err);
