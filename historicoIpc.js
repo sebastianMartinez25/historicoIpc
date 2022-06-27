@@ -302,8 +302,8 @@ function validarDigito3(evt)
       var vlrmI=mesInicial.selectedIndex;
       var vlrmF=mesFinal.selectedIndex;
       var vf;
-      var vp;
       var ti;
+      var tasaAcum;
       var p=1;
       var ptoI;
       var ptoF;
@@ -335,6 +335,13 @@ function validarDigito3(evt)
 
     function calculoFinal()
     {
+      var inflacion_Acumulada=document.getElementById("inflacion_Acumulada");
+      //var cuentaHijosTexto=inflacion_Acumulada.childElementCount;
+      while (inflacion_Acumulada.firstChild)
+      {
+      inflacion_Acumulada.removeChild(inflacion_Acumulada.firstChild);
+      }
+
       for(iteracion=0;iteracion<=totalFilas;iteracion++)
       {
         if(aF==datosfuncion[iteracion][0]&&mF==datosfuncion[iteracion][1])
@@ -351,6 +358,14 @@ function validarDigito3(evt)
         
         ti=datosfuncion[iteracion2][2];
         ti=parseFloat((ti.replace(",",".")))/100;
+        if(isNaN(tasaAcum))
+        {
+          tasaAcum=(1+ti)*(1+0)-1;
+        }
+        else
+        {
+          tasaAcum=(1+ti)*(1+tasaAcum)-1;
+        }
 
         if (vlrFut==1)
         {
@@ -376,7 +391,20 @@ function validarDigito3(evt)
       else{
         montoInicial.value=string1+string2;
       }
-      
+      tasaAcum=(tasaAcum*100).toFixed(3).replace(".",",");
+      var uComa=tasaAcum.indexOf(",");
+      longString=tasaAcum.length;
+      cad1=tasaAcum.substring(0,uComa);
+      cad1=new Intl.NumberFormat('en-EN').format(cad1).replace(/,/g,".");
+      cad2=tasaAcum.substring(uComa,longString);
+      tasaAcum=cad1+cad2;
+      //MENSAJE FINAL DE LA INFLACION ACUMULADA
+
+var mensajeInfla =document.createTextNode("Desde el mes de " + mI + " de " + aI + " hasta el mes de " 
++ mF + " de " + aF + " la inflación acumulada en COLOMBIA fue de " +tasaAcum + "%" + ", por lo tanto, sus inversiones tuvieron que haber generado rentabilidades mayores al "
++ tasaAcum +"%");
+inflacion_Acumulada.appendChild(mensajeInfla);
+///
     }
   }
 }).catch(err=>{
