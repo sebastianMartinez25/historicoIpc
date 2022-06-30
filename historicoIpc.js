@@ -321,12 +321,14 @@ function validarDigito3(evt)
       calculoFinal();
      }
           //CONDICION PARA VALOR PRESENTE
-     if (aI==aF && vlrmI<=vlrmF && mtoF>0 ||(aI<aF && mtoF>0))
+     else if (aI==aF && vlrmI<=vlrmF && mtoF>0 ||(aI<aF && mtoF>0))
      {
       vlrFut=0;
       calculoFinal();
      }
-     
+     else{
+      alert("NUNCA la fecha inicial puede ser mayor que la fecha final, puede ser menor o igual");
+     }
 
     }
     else{
@@ -413,3 +415,69 @@ inflacion_Acumulada.appendChild(mensajeInfla);
 } // fin funcion getLista()
 } // fin methods
 }) // fin instancia
+
+//JAVASCRIPT PURO- POR FUERA DE VUEJS
+
+var rentabilidad=document.getElementById("rentabilidad");
+
+var inflac=document.getElementById("inflac");
+var rentabilidadReal=document.getElementById("rentabilidadReal");
+rentabilidad.addEventListener("keypress",validarNumber);
+rentabilidad.addEventListener("keyup",validarPorcentaje);
+function validarNumber(e)
+{
+const porcentaje=/^[\d]+$/;
+var digitado=e.key;
+if (porcentaje.test(digitado))
+        {       
+        }
+        else{
+          e.preventDefault();
+        }
+}
+function validarPorcentaje()
+{
+  
+  var valorNew=rentabilidad.value;
+  var coma=valorNew.indexOf(",");
+  var parteI;
+  var parteF;
+  var largo;
+  
+ if(valorNew==="")
+ {
+  valorNew=0+","+000;
+ }
+ else
+ {
+  if(coma<0)
+  {
+    
+    valorNew=valorNew+","+000; 
+  }
+  else if(coma==0)
+  {
+    valorNew=0+","+000;
+  }
+  else
+  {
+    parteI=parseInt(valorNew.substring(0,coma));
+    largo=valorNew.length;
+    parteF=parseFloat((valorNew.substring(coma+1, largo)));
+    console.log(1);
+    if(coma+1==largo)
+    {
+      valorNew=parteI+","+000;
+    }
+    else
+    {
+      valorNew=parteI+","+parteF;
+    }
+  }
+  
+ }
+ rentabilidad.value=valorNew;
+  
+}
+
+//FIN JAVASCRIPT PURO
