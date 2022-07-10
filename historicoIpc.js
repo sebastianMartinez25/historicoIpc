@@ -572,20 +572,24 @@ if (porcentaje.test(digitado))
                 var longParteUna=parteUna.length-1;
                 console.log(longParteUna);
                 var bucle;
+                var ingreso=0;
                 for(bucle=1;bucle<=longParteUna;bucle++)
                 {
                   if(parteUna[bucle]>0)
                   {
+                    ingreso=1;
                     break;
                   }
                 }
-                if(longParteUna<=0)
+                if(ingreso==0)
                 {
                   parteUna=0;
                 }
                 else
                 {
-                  parteUna=rentabilidad.value.substring(bucle,coma);
+                  console.log(bucle);
+                  console.log(coma);      
+                 parteUna=rentabilidad.value.substring(bucle,coma);
                 }
                 
                 rentabilidad.value=parteUna+","+parteF;
