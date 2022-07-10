@@ -419,65 +419,305 @@ inflacion_Acumulada.appendChild(mensajeInfla);
 //JAVASCRIPT PURO- POR FUERA DE VUEJS
 
 var rentabilidad=document.getElementById("rentabilidad");
-
+rentabilidad.value=0+","+0;
 var inflac=document.getElementById("inflac");
 var rentabilidadReal=document.getElementById("rentabilidadReal");
-rentabilidad.addEventListener("keypress",validarNumber);
-rentabilidad.addEventListener("keyup",validarPorcentaje);
+rentabilidad.addEventListener("keydown",validarNumber);
+
+//rentabilidad.addEventListener("keyup",validarPorcentaje);
+
 function validarNumber(e)
 {
 const porcentaje=/^[\d]+$/;
 var digitado=e.key;
+
+            var cursorInicial=rentabilidad.selectionStart;
+            var cursorFinal=rentabilidad.selectionEnd;
+            var valorNew=rentabilidad.value;
+            var coma=valorNew.indexOf(",");
+            var largo=valorNew.length;
+            var parteI=(valorNew.substring(0,coma));
+            var longI=parteI.length;
+            var parteF=((valorNew.substring(coma+1, largo)));
+            var longF=parteF.length;
+            console.log(coma);
+            console.log(largo);
+            console.log(cursorInicial);
+            console.log(cursorFinal);
+            var caracteresInput=valorNew.split("");
+          var longCaracteresInput=rentabilidad.value.length;
+          console.log(longCaracteresInput);
+
 if (porcentaje.test(digitado))
-        {       
+        {
+          
+          if (cursorInicial>coma)
+          {
+            console.log("despuescom");
+           /* if(valorNew[cursorInicial-1]==0 && valorNew[cursorInicial-2]==",")
+            {
+              e.preventDefault();
+              console.log(digitado);
+              rentabilidad.value=parseInt(parteI)+","+digitado;              
+            } */
+           
+          }
+          else if(cursorInicial<=coma){
+            console.log("antescoma");
+            if(valorNew[cursorInicial-1]==0 && valorNew[cursorInicial-2]===undefined)
+            {
+              e.preventDefault();
+              rentabilidad.value=digitado+","+parseInt(parteF);
+              rentabilidad.selectionStart=1;
+              rentabilidad.selectionEnd=1;
+            }
+            if(valorNew[cursorInicial-1]===undefined && digitado==0)
+            {
+              e.preventDefault();              
+            }
+          }
+          else{
+           console.log("ltima"); 
+          }
+        }
+
+        else if(digitado==="ArrowLeft" || digitado==="ArrowRight"|| digitado==="Backspace")
+        {
+          if(digitado==="Backspace")
+          {
+            
+          
+          if (cursorInicial===cursorFinal)
+          {
+            
+            if(caracteresInput[cursorInicial-1]===","|| caracteresInput[cursorInicial-1]==0)
+          {
+            
+           if(caracteresInput[cursorInicial-1]==0)
+           {
+            var longitudtext;
+            if(cursorInicial>coma)
+            {
+             longitudtext=(largo-1)-(coma);
+              if(longitudtext>1)
+              {}
+              else{ e.preventDefault();
+                rentabilidad.selectionStart=cursorInicial-1;
+                rentabilidad.selectionEnd=cursorInicial-1;
+              }
+            }
+            else
+            {
+              longitudtext=coma;
+              if(longitudtext>1)
+              {}
+              else{ e.preventDefault();
+                rentabilidad.selectionStart=cursorInicial-1;
+                rentabilidad.selectionEnd=cursorInicial-1;
+              }
+            }
+            
+           }
+           else{
+            e.preventDefault();
+            rentabilidad.selectionStart=cursorInicial-1;
+            rentabilidad.selectionEnd=cursorInicial-1;
+           }
+           
+          }
+          else{
+            if (cursorInicial>coma)
+            {
+              
+              if(longF-1===0)
+              {
+                rentabilidad.value=parseInt(parteI)+","+0;
+                rentabilidad.selectionStart=0;
+                  rentabilidad.selectionEnd=0;
+                  console.log("aas "+longCaracteresInput);
+                setTimeout(espera,0.1);
+                var ctime=setTimeout(espera,0.1);
+                function espera()
+                {
+                  console.log("waitttt");
+                  rentabilidad.selectionStart=longCaracteresInput;
+                  rentabilidad.selectionEnd=longCaracteresInput;
+                  
+                }
+                clearTimeout(ctime);
+              }
+              else{}
+            }
+            else{
+              
+              if(longI-1===0)
+              {
+                if(rentabilidad.selectionStart<1)
+                {
+                  
+                  rentabilidad.value=parteI+","+parteF;
+                }
+                else{
+                  rentabilidad.value=0+","+parteF;
+                }
+                rentabilidad.selectionStart=0;
+                rentabilidad.selectionEnd=0;
+              }
+              if(rentabilidad.value[cursorInicial-2 ]===undefined &&
+                rentabilidad.value[cursorInicial]==0)
+              {
+                e.preventDefault();
+                console.log("quiii");
+                var parteUna=parteI.split("");
+                var longParteUna=parteUna.length-1;
+                console.log(longParteUna);
+                var bucle;
+                for(bucle=1;bucle<=longParteUna;bucle++)
+                {
+                  if(parteUna[bucle]>0)
+                  {
+                    break;
+                  }
+                }
+                if(longParteUna<=0)
+                {
+                  parteUna=0;
+                }
+                else
+                {
+                  parteUna=rentabilidad.value.substring(bucle,coma);
+                }
+                
+                rentabilidad.value=parteUna+","+parteF;
+                console.log(rentabilidad.selectionStart);
+                rentabilidad.selectionStart=0;
+                rentabilidad.selectionEnd=0;
+
+
+              }
+            }
+          }
+          }
+
+          else
+          {
+            console.log(cursorInicial);
+            console.log(cursorFinal);
+            var posicionBorrados=[];
+            while(cursorInicial<cursorFinal)
+            {
+              e.preventDefault();
+              if(caracteresInput[cursorInicial]===",")
+              {
+                cursorInicial+=1;
+              }
+              else
+              {
+                posicionBorrados.push(cursorInicial);
+                cursorInicial+=1;
+              }
+              
+            }
+            var rep;
+            var longitudPosicionBorrados=posicionBorrados.length;
+            var borrar;
+            for (rep=0;rep<longitudPosicionBorrados;rep++)
+            {
+              borrar=posicionBorrados[rep];
+                caracteresInput.splice(borrar-rep,1);
+            }
+            var newComa=caracteresInput.indexOf(",");
+            var newlength=caracteresInput.length-1;
+            var rentabilidadRes;
+            console.log(newComa);
+            console.log(newlength);
+            //NUEVA PARTE INICIAL
+            var partOne=caracteresInput.join("").substring(0,newComa).split('');
+            var longPartOne=partOne.length-1;
+            var partTwo=caracteresInput.join("").substring(newComa,newlength+1).split('');
+            var ite;
+            var entro=0;
+            for(ite=0;ite<=longPartOne;ite++)
+            {
+              if(partOne[ite-ite]==0)
+              {
+                partOne.splice(ite-ite,1);
+                entro=1;
+              }
+              else
+              {break;
+              }
+            }
+            if (newComa>=2 && entro==1)
+            { 
+                caracteresInput=partOne.join("")+partTwo.join("");
+            }
+            else
+            {
+              caracteresInput=caracteresInput.join("");
+            }
+            ////
+      //estructurar mejor este codigo
+            if(newComa==newlength && newComa>=1)
+            {
+              rentabilidadRes=caracteresInput+0;
+              console.log("aui1");
+            }
+            if(newComa==0 && newlength>=1)
+            {
+             rentabilidadRes=0+caracteresInput;
+             console.log("aui2");
+            }
+            if(newComa==0 && newlength==0)
+            {
+              rentabilidadRes=0+caracteresInput+0;
+              console.log("aui3");
+            }
+            if(newlength>newComa && newComa>=1)
+            {
+              rentabilidadRes=caracteresInput;
+              console.log("aui4");
+            }
+            console.log(rentabilidadRes);
+            rentabilidad.value=rentabilidadRes;
+            rentabilidad.selectionStart=0;
+            rentabilidad.selectionEnd=0;
+
+          }
+          
+          }
         }
         else{
+          
           e.preventDefault();
         }
 }
 function validarPorcentaje()
 {
-  
   var valorNew=rentabilidad.value;
   var coma=valorNew.indexOf(",");
-  var parteI;
-  var parteF;
-  var largo;
-  
+  var parteI=parseInt(valorNew.substring(0,coma));
+    var largo=valorNew.length;
+    var parteF=parseFloat((valorNew.substring(coma+1, largo)));
+  console.log(parteI);
+  console.log(parteF);
  if(valorNew==="")
  {
-  valorNew=0+","+000;
+  valorNew=0+","+0;
  }
+ 
  else
  {
-  if(coma<0)
-  {
-    
-    valorNew=valorNew+","+000; 
-  }
-  else if(coma==0)
-  {
-    valorNew=0+","+000;
-  }
-  else
-  {
-    parteI=parseInt(valorNew.substring(0,coma));
-    largo=valorNew.length;
-    parteF=parseFloat((valorNew.substring(coma+1, largo)));
-    console.log(1);
     if(coma+1==largo)
     {
-      valorNew=parteI+","+000;
+      valorNew=parteI+","+0;
     }
     else
     {
       valorNew=parteI+","+parteF;
     }
-  }
-  
  }
  rentabilidad.value=valorNew;
-  
 }
 
 //FIN JAVASCRIPT PURO
