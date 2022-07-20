@@ -440,27 +440,92 @@ var digitado=e.key;
             var longI=parteI.length;
             var parteF=((valorNew.substring(coma+1, largo)));
             var longF=parteF.length;
-            console.log(coma);
-            console.log(largo);
-            console.log(cursorInicial);
-            console.log(cursorFinal);
             var caracteresInput=valorNew.split("");
           var longCaracteresInput=rentabilidad.value.length;
           console.log(longCaracteresInput);
 
 if (porcentaje.test(digitado))
         {
-          
-          if (cursorInicial>coma)
+//CODIGO PARA SELECCIONAR Y REEMPLAZAR POR NÚMEROS
+  console.log("cursorInicial "+cursorInicial);
+  console.log("cursor Final "+cursorFinal);
+  console.log("coma "+coma);
+  console.log("long "+largo);
+  console.log("long Array "+longCaracteresInput);
+  var ciclo;
+  var cI=parseInt(cursorInicial); 
+  var cF=parseInt(cursorFinal);
+  var ptosABorrar=[];
+  if(rentabilidad.value[cursorInicial]==",")
+  {
+    ciclo=(cursorFinal-coma);
+    while(cI<=cF)
+  {
+    console.log("ci "+(cI));
+    ptosABorrar.push(cI);
+    cI+=1;  
+    console.log("cursorI " +ptosABorrar);
+  } 
+  
+  }
+  else{
+    ciclo=(cursorFinal-cursorInicial)-1;
+    while(cI<cF)
+  {
+    ptosABorrar.push(cI);
+    cI+=1;  
+    console.log("cursorI " +ptosABorrar);
+  } 
+  }
+  var ciclos;
+  var cicla=0;
+  console.log("CICLO "+ciclo);   
+  for(ciclos=0;ciclos<=ciclo;ciclos++)
+  {
+    //console.log(caracteresInput[ptosABorrar[ciclos]-cicla]);
+    if(caracteresInput[ptosABorrar[ciclos]-cicla]==",")
+    {
+    if(ciclos<=0)
+    {caracteresInput.splice(ptosABorrar[ciclos],1,digitado,",");
+    console.log(caracteresInput);
+    cicla=0;
+    }
+    else
+    {
+      cicla=cicla;
+      console.log(caracteresInput);
+    }                
+    }
+    else{
+    if (ciclos>0)
+    {  
+      caracteresInput.splice(ptosABorrar[ciclos]-cicla,1);
+      cicla+=1; 
+    }
+    else{
+      caracteresInput.splice(ptosABorrar[ciclos],1,digitado);
+      console.log(caracteresInput);
+    }
+    } 
+  }
+  
+  if(caracteresInput[caracteresInput.length-1]==",")
+  {
+    caracteresInput.push(0);
+  }
+  if(caracteresInput[0]==0 && caracteresInput[1]!=",")
+  {
+    caracteresInput.splice(0,1);
+  }
+  else{}
+  console.log(caracteresInput);
+  rentabilidad.value=caracteresInput.join("");
+      
+//////FIN
+///INICIO PARA AJUSTAR NUMEROS EN LA PARTEI Y LA PARTEF
+  if (cursorInicial>coma)
           {
             console.log("despuescom");
-           /* if(valorNew[cursorInicial-1]==0 && valorNew[cursorInicial-2]==",")
-            {
-              e.preventDefault();
-              console.log(digitado);
-              rentabilidad.value=parseInt(parteI)+","+digitado;              
-            } */
-           
           }
           else if(cursorInicial<=coma){
             console.log("antescoma");
@@ -475,18 +540,19 @@ if (porcentaje.test(digitado))
             {
               e.preventDefault();              
             }
+
           }
           else{
-           console.log("ltima"); 
+           console.log("ultima"); 
           }
+          
+          ///////////FIN
         }
 
         else if(digitado==="ArrowLeft" || digitado==="ArrowRight"|| digitado==="Backspace")
         {
           if(digitado==="Backspace")
-          {
-            
-          
+          {          
           if (cursorInicial===cursorFinal)
           {
             
@@ -567,7 +633,6 @@ if (porcentaje.test(digitado))
                 rentabilidad.value[cursorInicial]==0)
               {
                 e.preventDefault();
-                console.log("quiii");
                 var parteUna=parteI.split("");
                 var longParteUna=parteUna.length-1;
                 console.log(longParteUna);
@@ -641,6 +706,7 @@ if (porcentaje.test(digitado))
             var partTwo=caracteresInput.join("").substring(newComa,newlength+1).split('');
             var ite;
             var entro=0;
+           
             for(ite=0;ite<=longPartOne;ite++)
             {
               if(partOne[ite-ite]==0)
@@ -660,7 +726,7 @@ if (porcentaje.test(digitado))
             {
               caracteresInput=caracteresInput.join("");
             }
-            ////
+            //////
       //estructurar mejor este codigo
             if(newComa==newlength && newComa>=1)
             {
@@ -686,17 +752,15 @@ if (porcentaje.test(digitado))
             rentabilidad.value=rentabilidadRes;
             rentabilidad.selectionStart=0;
             rentabilidad.selectionEnd=0;
-
           }
           
           }
         }
-        else{
-          
+        else{          
           e.preventDefault();
         }
 }
-function validarPorcentaje()
+/*function validarPorcentaje()
 {
   var valorNew=rentabilidad.value;
   var coma=valorNew.indexOf(",");
@@ -722,6 +786,6 @@ function validarPorcentaje()
     }
  }
  rentabilidad.value=valorNew;
-}
+}*/
 
 //FIN JAVASCRIPT PURO
