@@ -423,6 +423,14 @@ rentabilidad.value=0+","+0;
 var inflac=document.getElementById("inflac");
 var rentabilidadReal=document.getElementById("rentabilidadReal");
 rentabilidad.addEventListener("keydown",validarNumber);
+rentabilidad.addEventListener("paste",prohibido_paste_cut);
+rentabilidad.addEventListener("cut",prohibido_paste_cut);
+rentabilidad.addEventListener("dragstart",prohibido_paste_cut);
+
+function prohibido_paste_cut(e)
+{
+e.preventDefault();
+}
 
 //rentabilidad.addEventListener("keyup",validarPorcentaje);
 
@@ -442,11 +450,17 @@ var digitado=e.key;
             var longF=parteF.length;
             var caracteresInput=valorNew.split("");
           var longCaracteresInput=rentabilidad.value.length;
+          var dataFinal;
+          var dividirmiles;
+          var partidaComa;
+          var extensionComa;
+          var comaFinal;
+
           console.log(longCaracteresInput);
 
 if (porcentaje.test(digitado))
-        {
-//CODIGO PARA SELECCIONAR Y REEMPLAZAR POR NÚMEROS
+    {
+           //CODIGO PARA SELECCIONAR Y REEMPLAZAR POR NÚMEROS 
   console.log("cursorInicial "+cursorInicial);
   console.log("cursor Final "+cursorFinal);
   console.log("coma "+coma);
@@ -476,13 +490,13 @@ if (porcentaje.test(digitado))
     cI+=1;  
     console.log("cursorI " +ptosABorrar);
   } 
+
   }
   var ciclos;
   var cicla=0;
-  console.log("CICLO "+ciclo);   
+  console.log("CICLO: "+ciclo);   
   for(ciclos=0;ciclos<=ciclo;ciclos++)
   {
-    //console.log(caracteresInput[ptosABorrar[ciclos]-cicla]);
     if(caracteresInput[ptosABorrar[ciclos]-cicla]==",")
     {
     if(ciclos<=0)
@@ -517,11 +531,25 @@ if (porcentaje.test(digitado))
   {
     caracteresInput.splice(0,1);
   }
-  else{}
   console.log(caracteresInput);
-  rentabilidad.value=caracteresInput.join("");
       
 //////FIN
+if(ciclo>0)
+{
+   e.preventDefault();
+   dataFinal=caracteresInput.join("");
+   dataFinal=dataFinal.split(".").join("");
+   extensionComa=dataFinal.length;
+   partidaComa=dataFinal.indexOf(",");
+   comaFinal=dataFinal.substring(partidaComa,extensionComa);
+   dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+   console.log("dividir miles" + dividirmiles);
+  rentabilidad.value=dividirmiles+comaFinal;
+  console.log("yeahh");
+}
+else 
+{   
+  console.log("fuckk");
 ///INICIO PARA AJUSTAR NUMEROS EN LA PARTEI Y LA PARTEF
   if (cursorInicial>coma)
           {
@@ -532,21 +560,32 @@ if (porcentaje.test(digitado))
             if(valorNew[cursorInicial-1]==0 && valorNew[cursorInicial-2]===undefined)
             {
               e.preventDefault();
-              rentabilidad.value=digitado+","+parseInt(parteF);
+              rentabilidad.value=digitado+","+parteF;
               rentabilidad.selectionStart=1;
               rentabilidad.selectionEnd=1;
+              
             }
-            if(valorNew[cursorInicial-1]===undefined && digitado==0)
+            else if(valorNew[cursorInicial-1]===undefined && digitado==0)
             {
               e.preventDefault();              
             }
-
+            else
+            {
+              e.preventDefault();
+              valorNew=valorNew.split("");
+              valorNew.splice(cursorInicial,0,digitado);
+              dataFinal=valorNew.join("");
+              dataFinal=dataFinal.split(".").join("");
+              extensionComa=dataFinal.length;
+            partidaComa=dataFinal.indexOf(",");
+            comaFinal=dataFinal.substring(partidaComa,extensionComa);
+            dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+            rentabilidad.value=dividirmiles+comaFinal;
+            }
+            
           }
-          else{
-           console.log("ultima"); 
-          }
-          
-          ///////////FIN
+      ///////////FIN
+        }
         }
 
         else if(digitado==="ArrowLeft" || digitado==="ArrowRight"|| digitado==="Backspace")
@@ -597,7 +636,10 @@ if (porcentaje.test(digitado))
               
               if(longF-1===0)
               {
-                rentabilidad.value=parseInt(parteI)+","+0;
+                //rentabilidad.value=parseInt(parteI)+","+0;
+              dataFinal=parteI.toString().split(".").join("");
+              dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+              rentabilidad.value=dividirmiles+","+0;
                 rentabilidad.selectionStart=0;
                   rentabilidad.selectionEnd=0;
                   console.log("aas "+longCaracteresInput);
@@ -616,20 +658,27 @@ if (porcentaje.test(digitado))
             }
             else{
               
+              console.log("borranding");
               if(longI-1===0)
               {
                 if(rentabilidad.selectionStart<1)
                 {
                   
-                  rentabilidad.value=parteI+","+parteF;
+                  dataFinal=parteI+","+parteF;
                 }
                 else{
-                  rentabilidad.value=0+","+parteF;
+                  dataFinal=0+","+parteF;
                 }
+                dataFinal=dataFinal.toString().split(".").join("");
+                extensionComa=dataFinal.length;
+                partidaComa=dataFinal.indexOf(",");
+                comaFinal=dataFinal.substring(partidaComa,extensionComa);
+                dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+                rentabilidad.value=dividirmiles+comaFinal;
                 rentabilidad.selectionStart=0;
                 rentabilidad.selectionEnd=0;
               }
-              if(rentabilidad.value[cursorInicial-2 ]===undefined &&
+              else if(rentabilidad.value[cursorInicial-2 ]===undefined &&
                 rentabilidad.value[cursorInicial]==0)
               {
                 e.preventDefault();
@@ -656,13 +705,40 @@ if (porcentaje.test(digitado))
                   console.log(coma);      
                  parteUna=rentabilidad.value.substring(bucle,coma);
                 }
-                
-                rentabilidad.value=parteUna+","+parteF;
+                dataFinal=parteUna.toString().split(".").join("");
+                dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+
+                rentabilidad.value=dividirmiles+","+parteF;
                 console.log(rentabilidad.selectionStart);
                 rentabilidad.selectionStart=0;
                 rentabilidad.selectionEnd=0;
-
-
+              }
+              else
+              {
+                e.preventDefault();
+                valorNew=rentabilidad.value.split("");
+                console.log(valorNew);
+                console.log(cursorInicial);
+                if(valorNew[cursorInicial-1]=="," || cursorInicial==0)
+                {
+                  console.log("aquitoy");
+                }
+                else
+                {
+                  valorNew.splice(cursorInicial-1,1);
+                  console.log(valorNew);
+                dataFinal=valorNew.join("");
+                dataFinal=dataFinal.split(".").join("");
+                extensionComa=dataFinal.length;
+              partidaComa=dataFinal.indexOf(",");
+              comaFinal=dataFinal.substring(partidaComa,extensionComa);
+              dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+              rentabilidad.value=dividirmiles+comaFinal; 
+              //rentabilidad.selectionStart=0;
+                //rentabilidad.selectionEnd=0;
+                }
+                
+              
               }
             }
           }
@@ -749,43 +825,28 @@ if (porcentaje.test(digitado))
               console.log("aui4");
             }
             console.log(rentabilidadRes);
-            rentabilidad.value=rentabilidadRes;
+   dataFinal=rentabilidadRes.split(".").join("");
+   extensionComa=dataFinal.length;
+   partidaComa=dataFinal.indexOf(",");
+   comaFinal=dataFinal.substring(partidaComa,extensionComa);
+   dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+  rentabilidad.value=dividirmiles+comaFinal;
+
+            //rentabilidad.value=rentabilidadRes;
             rentabilidad.selectionStart=0;
             rentabilidad.selectionEnd=0;
-          }
-          
+          }        
           }
         }
         else{          
           e.preventDefault();
         }
+        //CREAR CHECKBX
+        var valorNegativo=document.getElementById("valorNegativo");
+        var crearInput=document.createElement('INPUT');
+        crearInput.setAttribute("type","checkbox");
+        crearInput.setAttribute("id","negativoUno");
+        valorNegativo.appendChild(crearInput);
+        //FIN CHECKBOX
 }
-/*function validarPorcentaje()
-{
-  var valorNew=rentabilidad.value;
-  var coma=valorNew.indexOf(",");
-  var parteI=parseInt(valorNew.substring(0,coma));
-    var largo=valorNew.length;
-    var parteF=parseFloat((valorNew.substring(coma+1, largo)));
-  console.log(parteI);
-  console.log(parteF);
- if(valorNew==="")
- {
-  valorNew=0+","+0;
- }
- 
- else
- {
-    if(coma+1==largo)
-    {
-      valorNew=parteI+","+0;
-    }
-    else
-    {
-      valorNew=parteI+","+parteF;
-    }
- }
- rentabilidad.value=valorNew;
-}*/
-
 //FIN JAVASCRIPT PURO
