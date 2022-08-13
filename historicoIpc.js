@@ -421,11 +421,20 @@ inflacion_Acumulada.appendChild(mensajeInfla);
 var rentabilidad=document.getElementById("rentabilidad");
 rentabilidad.value=0+","+0;
 var inflac=document.getElementById("inflac");
+inflac.value=0+","+0;
+
 var rentabilidadReal=document.getElementById("rentabilidadReal");
+
 rentabilidad.addEventListener("keydown",validarNumber);
 rentabilidad.addEventListener("paste",prohibido_paste_cut);
 rentabilidad.addEventListener("cut",prohibido_paste_cut);
 rentabilidad.addEventListener("dragstart",prohibido_paste_cut);
+
+inflac.addEventListener("keydown",validarNumber);
+inflac.addEventListener("paste",prohibido_paste_cut);
+inflac.addEventListener("cut",prohibido_paste_cut);
+inflac.addEventListener("dragstart",prohibido_paste_cut);
+
 
 function prohibido_paste_cut(e)
 {
@@ -457,7 +466,7 @@ var digitado=e.key;
           var comaFinal;
 
           console.log(longCaracteresInput);
-
+//PRIMER IF VALIDA SI EL VALOR DIGITADO ES UN NUMERO
 if (porcentaje.test(digitado))
     {
            //CODIGO PARA SELECCIONAR Y REEMPLAZAR POR NÚMEROS 
@@ -470,8 +479,16 @@ if (porcentaje.test(digitado))
   var cI=parseInt(cursorInicial); 
   var cF=parseInt(cursorFinal);
   var ptosABorrar=[];
-  if(rentabilidad.value[cursorInicial]==",")
+  // VALIDA SI DONDE ESTA EL CURSOR HAY UNA COMA
+  //INICIO PRUEBAS CURSOR
+  /*if(rentabilidad.value[cursorInicial]==",")
   {
+    console.log("hay coma");
+  }*/
+  ////PRUEBAS DE CURSOR
+  if(valorNew[cursorInicial]==",")
+  {
+    console.log("hay coma2");
     ciclo=(cursorFinal-coma);
     while(cI<=cF)
   {
@@ -482,6 +499,7 @@ if (porcentaje.test(digitado))
   } 
   
   }
+  // SI NO ES UNA COMA, HAGA ESTO:
   else{
     ciclo=(cursorFinal-cursorInicial)-1;
     while(cI<cF)
@@ -843,10 +861,38 @@ else
         }
         //CREAR CHECKBX
         var valorNegativo=document.getElementById("valorNegativo");
-        var crearInput=document.createElement('INPUT');
-        crearInput.setAttribute("type","checkbox");
-        crearInput.setAttribute("id","negativoUno");
-        valorNegativo.appendChild(crearInput);
+        var vInput;
+        setTimeout(waittt,0.1);
+                var cltime=setTimeout(waittt,0.1);
+                function waittt()
+                { 
+                    vInput=rentabilidad.value.split(",").join("");
+                    vInput=vInput.split(".").join("");
+                  vInput=parseInt(vInput);
+                  console.log(vInput);
+                if(vInput>0 && valorNegativo.childElementCount==0)
+                    {
+                    var crearInput=document.createElement('INPUT');
+                    crearInput.setAttribute("type","checkbox");
+                    crearInput.setAttribute("id","negativoUno");
+                    valorNegativo.appendChild(crearInput);
+                    } 
+                    if(vInput<=0 && valorNegativo.childElementCount>0)
+                    {
+                      valorNegativo.removeChild(valorNegativo.firstChild);
+                    }
+                }
+                clearTimeout(cltime);
+                
+          //VALIDAR SI ESTA MARCADO EL PRIMER CHECK      
+          if(valorNegativo.childElementCount>0)
+          {
+            var checkUno=document.getElementById("negativoUno");
+            console.log(checkUno.checked);
+          }
+      
+      //FIN VALIDACION PRIMER CHECK
+        
         //FIN CHECKBOX
 }
 //FIN JAVASCRIPT PURO
