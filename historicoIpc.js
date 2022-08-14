@@ -425,12 +425,12 @@ inflac.value=0+","+0;
 
 var rentabilidadReal=document.getElementById("rentabilidadReal");
 
-rentabilidad.addEventListener("keydown",validarNumber);
+rentabilidad.addEventListener("keydown",rentability);
 rentabilidad.addEventListener("paste",prohibido_paste_cut);
 rentabilidad.addEventListener("cut",prohibido_paste_cut);
 rentabilidad.addEventListener("dragstart",prohibido_paste_cut);
 
-inflac.addEventListener("keydown",validarNumber);
+inflac.addEventListener("keydown",inflation);
 inflac.addEventListener("paste",prohibido_paste_cut);
 inflac.addEventListener("cut",prohibido_paste_cut);
 inflac.addEventListener("dragstart",prohibido_paste_cut);
@@ -440,7 +440,17 @@ function prohibido_paste_cut(e)
 {
 e.preventDefault();
 }
-
+var activador;
+function rentability(e)
+{
+  activador=1;
+  validarNumber(e);
+}
+function inflation(e)
+{
+  activador=0;
+  validarNumber(e);
+}
 //rentabilidad.addEventListener("keyup",validarPorcentaje);
 
 function validarNumber(e)
@@ -448,9 +458,23 @@ function validarNumber(e)
 const porcentaje=/^[\d]+$/;
 var digitado=e.key;
 
-            var cursorInicial=rentabilidad.selectionStart;
-            var cursorFinal=rentabilidad.selectionEnd;
-            var valorNew=rentabilidad.value;
+            var cursorInicial;
+            var cursorFinal;
+            var valorNew;
+
+            if (activador==1)
+            {
+              cursorInicial=rentabilidad.selectionStart;
+              cursorFinal=rentabilidad.selectionEnd;
+              valorNew=rentabilidad.value;
+            }
+            else
+            {
+              cursorInicial=inflac.selectionStart;
+              cursorFinal=inflac.selectionEnd;
+              valorNew=inflac.value;
+            }
+
             var coma=valorNew.indexOf(",");
             var largo=valorNew.length;
             var parteI=(valorNew.substring(0,coma));
@@ -458,7 +482,7 @@ var digitado=e.key;
             var parteF=((valorNew.substring(coma+1, largo)));
             var longF=parteF.length;
             var caracteresInput=valorNew.split("");
-          var longCaracteresInput=rentabilidad.value.length;
+          var longCaracteresInput=valorNew.length;
           var dataFinal;
           var dividirmiles;
           var partidaComa;
@@ -474,7 +498,7 @@ if (porcentaje.test(digitado))
   console.log("cursor Final "+cursorFinal);
   console.log("coma "+coma);
   console.log("long "+largo);
-  console.log("long Array "+longCaracteresInput);
+  console.log("long Array "+longCaracteresInput +largo);
   var ciclo;
   var cI=parseInt(cursorInicial); 
   var cF=parseInt(cursorFinal);
@@ -562,7 +586,9 @@ if(ciclo>0)
    comaFinal=dataFinal.substring(partidaComa,extensionComa);
    dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
    console.log("dividir miles" + dividirmiles);
-  rentabilidad.value=dividirmiles+comaFinal;
+
+   if(activador==1){rentabilidad.value=dividirmiles+comaFinal;}
+   else{inflac.value=dividirmiles+comaFinal;} 
   console.log("yeahh");
 }
 else 
@@ -577,11 +603,14 @@ else
             console.log("antescoma");
             if(valorNew[cursorInicial-1]==0 && valorNew[cursorInicial-2]===undefined)
             {
-              e.preventDefault();
-              rentabilidad.value=digitado+","+parteF;
-              rentabilidad.selectionStart=1;
-              rentabilidad.selectionEnd=1;
               
+              e.preventDefault();
+              if(activador==1){rentabilidad.value=digitado+","+parteF;
+              rentabilidad.selectionStart=1;
+              rentabilidad.selectionEnd=1;}
+              else{inflac.value=digitado+","+parteF;
+              inflac.selectionStart=1;
+              inflac.selectionEnd=1;} 
             }
             else if(valorNew[cursorInicial-1]===undefined && digitado==0)
             {
@@ -598,7 +627,9 @@ else
             partidaComa=dataFinal.indexOf(",");
             comaFinal=dataFinal.substring(partidaComa,extensionComa);
             dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
-            rentabilidad.value=dividirmiles+comaFinal;
+            if(activador==1){rentabilidad.value=dividirmiles+comaFinal;}
+            else{inflac.value=dividirmiles+comaFinal;}
+            
             }
             
           }
@@ -625,26 +656,49 @@ else
               if(longitudtext>1)
               {}
               else{ e.preventDefault();
-                rentabilidad.selectionStart=cursorInicial-1;
-                rentabilidad.selectionEnd=cursorInicial-1;
+                if(activador==1){rentabilidad.selectionStart=cursorInicial-1;
+                  rentabilidad.selectionEnd=cursorInicial-1;}
+            else{inflac.selectionStart=cursorInicial-1;
+                inflac.selectionEnd=cursorInicial-1;}
+                
               }
             }
             else
             {
+              
               longitudtext=coma;
               if(longitudtext>1)
-              {}
+              {
+                console.log("weyy");
+                e.preventDefault();
+                valorNew=valorNew.split("");
+                valorNew.splice(cursorInicial-1,1);
+                dataFinal=valorNew.join("");
+                dataFinal=dataFinal.split(".").join("");
+                extensionComa=dataFinal.length;
+              partidaComa=dataFinal.indexOf(",");
+              comaFinal=dataFinal.substring(partidaComa,extensionComa);
+              dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
+              if(activador==1){rentabilidad.value=dividirmiles+comaFinal;}
+            else{inflac.value=dividirmiles+comaFinal; }
+                
+                /////////////////////////////////
+              }
               else{ e.preventDefault();
-                rentabilidad.selectionStart=cursorInicial-1;
-                rentabilidad.selectionEnd=cursorInicial-1;
+                if(activador==1){rentabilidad.selectionStart=cursorInicial-1;
+                  rentabilidad.selectionEnd=cursorInicial-1;}
+            else{inflac.selectionStart=cursorInicial-1;
+                inflac.selectionEnd=cursorInicial-1;}
               }
             }
             
            }
            else{
             e.preventDefault();
-            rentabilidad.selectionStart=cursorInicial-1;
-            rentabilidad.selectionEnd=cursorInicial-1;
+            if(activador==1){rentabilidad.selectionStart=cursorInicial-1;
+              rentabilidad.selectionEnd=cursorInicial-1;}
+        else{inflac.selectionStart=cursorInicial-1;
+            inflac.selectionEnd=cursorInicial-1;}
            }
            
           }
@@ -657,31 +711,36 @@ else
                 //rentabilidad.value=parseInt(parteI)+","+0;
               dataFinal=parteI.toString().split(".").join("");
               dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
-              rentabilidad.value=dividirmiles+","+0;
-                rentabilidad.selectionStart=0;
-                  rentabilidad.selectionEnd=0;
+              if(activador==1){rentabilidad.value=dividirmiles+","+0;
+              rentabilidad.selectionStart=0;
+              rentabilidad.selectionEnd=0;}
+            else{inflac.value=dividirmiles+","+0;
+            inflac.selectionStart=0;
+            inflac.selectionEnd=0;}
+              
                   console.log("aas "+longCaracteresInput);
                 setTimeout(espera,0.1);
                 var ctime=setTimeout(espera,0.1);
                 function espera()
                 {
                   console.log("waitttt");
-                  rentabilidad.selectionStart=longCaracteresInput;
-                  rentabilidad.selectionEnd=longCaracteresInput;
+                  if(activador==1){rentabilidad.selectionStart=longCaracteresInput;
+                    rentabilidad.selectionEnd=longCaracteresInput;}
+            else{inflac.selectionStart=longCaracteresInput;
+                inflac.selectionEnd=longCaracteresInput;}
                   
                 }
                 clearTimeout(ctime);
               }
               else{}
             }
-            else{
-              
+            else{ 
               console.log("borranding");
               if(longI-1===0)
               {
-                if(rentabilidad.selectionStart<1)
-                {
-                  
+                console.log("rentabilidad.selectionStart" +rentabilidad.selectionStart+cursorInicial);
+                if(cursorInicial<1)
+                {   
                   dataFinal=parteI+","+parteF;
                 }
                 else{
@@ -692,13 +751,20 @@ else
                 partidaComa=dataFinal.indexOf(",");
                 comaFinal=dataFinal.substring(partidaComa,extensionComa);
                 dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
-                rentabilidad.value=dividirmiles+comaFinal;
-                rentabilidad.selectionStart=0;
-                rentabilidad.selectionEnd=0;
+
+                if(activador==1){rentabilidad.value=dividirmiles+comaFinal;
+                  rentabilidad.selectionStart=0;
+                  rentabilidad.selectionEnd=0;}
+            else{inflac.value=dividirmiles+comaFinal;
+                inflac.selectionStart=0;
+                inflac.selectionEnd=0;}
+                
               }
-              else if(rentabilidad.value[cursorInicial-2 ]===undefined &&
-                rentabilidad.value[cursorInicial]==0)
+              else if(valorNew[cursorInicial-2 ]===undefined &&
+                valorNew[cursorInicial]==0)
+                
               {
+                
                 e.preventDefault();
                 var parteUna=parteI.split("");
                 var longParteUna=parteUna.length-1;
@@ -721,20 +787,23 @@ else
                 {
                   console.log(bucle);
                   console.log(coma);      
-                 parteUna=rentabilidad.value.substring(bucle,coma);
+                 parteUna=valorNew.substring(bucle,coma);
                 }
                 dataFinal=parteUna.toString().split(".").join("");
                 dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
-
-                rentabilidad.value=dividirmiles+","+parteF;
-                console.log(rentabilidad.selectionStart);
+                
+                console.log(valorNew.selectionStart);
+                if(activador==1){rentabilidad.value=dividirmiles+","+parteF;
                 rentabilidad.selectionStart=0;
-                rentabilidad.selectionEnd=0;
+                rentabilidad.selectionEnd=0;}
+            else{inflac.value=dividirmiles+","+parteF;
+            inflac.selectionStart=0;
+            inflac.selectionEnd=0;}
               }
               else
               {
                 e.preventDefault();
-                valorNew=rentabilidad.value.split("");
+                valorNew=valorNew.split("");
                 console.log(valorNew);
                 console.log(cursorInicial);
                 if(valorNew[cursorInicial-1]=="," || cursorInicial==0)
@@ -751,12 +820,12 @@ else
               partidaComa=dataFinal.indexOf(",");
               comaFinal=dataFinal.substring(partidaComa,extensionComa);
               dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
-              rentabilidad.value=dividirmiles+comaFinal; 
+              if(activador==1){rentabilidad.value=dividirmiles+comaFinal;}
+            else{inflac.value=dividirmiles+comaFinal; }
+              
               //rentabilidad.selectionStart=0;
                 //rentabilidad.selectionEnd=0;
                 }
-                
-              
               }
             }
           }
@@ -848,11 +917,14 @@ else
    partidaComa=dataFinal.indexOf(",");
    comaFinal=dataFinal.substring(partidaComa,extensionComa);
    dividirmiles=new Intl.NumberFormat('en-EN').format(parseFloat(dataFinal)).replace(/,/g,".");
-  rentabilidad.value=dividirmiles+comaFinal;
 
-            //rentabilidad.value=rentabilidadRes;
-            rentabilidad.selectionStart=0;
-            rentabilidad.selectionEnd=0;
+   //rentabilidad.value=rentabilidadRes;
+   if(activador==1){rentabilidad.value=dividirmiles+comaFinal;
+    rentabilidad.selectionStart=0;
+    rentabilidad.selectionEnd=0;}
+            else{inflac.value=dividirmiles+comaFinal;
+              inflac.selectionStart=0;
+              inflac.selectionEnd=0;}
           }        
           }
         }
@@ -861,16 +933,23 @@ else
         }
         //CREAR CHECKBX
         var valorNegativo=document.getElementById("valorNegativo");
+        var valorNegativoDos=document.getElementById("valorNegativoDos");
+
         var vInput;
         setTimeout(waittt,0.1);
                 var cltime=setTimeout(waittt,0.1);
                 function waittt()
                 { 
-                    vInput=rentabilidad.value.split(",").join("");
+                  console.log(rentabilidad.value +" & " +valorNew);
+                  if(activador==1){vInput=rentabilidad.value.split(",").join("");}
+            else{vInput=inflac.value.split(",").join("");}
+                    
                     vInput=vInput.split(".").join("");
                   vInput=parseInt(vInput);
                   console.log(vInput);
-                if(vInput>0 && valorNegativo.childElementCount==0)
+                  if(activador==1)
+                  {
+                    if(vInput>0 && valorNegativo.childElementCount==0)
                     {
                     var crearInput=document.createElement('INPUT');
                     crearInput.setAttribute("type","checkbox");
@@ -881,18 +960,94 @@ else
                     {
                       valorNegativo.removeChild(valorNegativo.firstChild);
                     }
+                  }
+            else
+            {
+              if(vInput>0 && valorNegativoDos.childElementCount==0)
+                    {
+                    var crearInput=document.createElement('INPUT');
+                    crearInput.setAttribute("type","checkbox");
+                    crearInput.setAttribute("id","negativoDos");
+                    valorNegativoDos.appendChild(crearInput);
+                    } 
+                    if(vInput<=0 && valorNegativoDos.childElementCount>0)
+                    {
+                      valorNegativoDos.removeChild(valorNegativoDos.firstChild);
+                    }
+            }   
                 }
-                clearTimeout(cltime);
-                
-          //VALIDAR SI ESTA MARCADO EL PRIMER CHECK      
-          if(valorNegativo.childElementCount>0)
-          {
-            var checkUno=document.getElementById("negativoUno");
-            console.log(checkUno.checked);
-          }
-      
-      //FIN VALIDACION PRIMER CHECK
+                clearTimeout(cltime);   
+          
         
         //FIN CHECKBOX
 }
+
+var boton_calcular=document.getElementById("calcular");
+boton_calcular.addEventListener("click",rentabilidadR);
+
+function rentabilidadR()
+{
+  var vlrRent=parseFloat(rentabilidad.value.split(".").join("").replace(/,/g,"."))/100;
+var vlrInflac=parseFloat(inflac.value.split(".").join("").replace(/,/g,"."))/100;
+  //VALIDAR SI ESTA MARCADO EL CHECK      
+if(valorNegativo.childElementCount>0)
+{
+  var checkUno=document.getElementById("negativoUno");
+  if(checkUno.checked===true)
+{
+  vlrRent=vlrRent*-1;
+}
+  console.log(checkUno.checked);
+}
+if(valorNegativoDos.childElementCount>0)
+{
+  var checkDos=document.getElementById("negativoDos");
+  console.log(checkDos.checked);
+  if(checkDos.checked===true)
+  {
+    vlrInflac=vlrInflac*-1;
+  }
+}
+//FIN VALIDACION DELCHECK
+console.log(vlrRent);
+console.log(vlrInflac);
+var vlrRentReal;
+if(vlrRent>=0 || vlrRent>=vlrInflac)
+{
+  vlrRentReal=(((1+vlrRent)/(1+vlrInflac)-1)*100).toFixed(5);
+}
+else
+{
+  vlrRentReal=(((1+(vlrRent*-1))*(1+vlrInflac)-1)*100).toFixed(5);
+}
+
+console.log(vlrRentReal);
+//////
+      /*var ubiCma=vlrRentReal.indexOf(",");
+      
+      var vlrUno=vlrRentReal.substring(0,ubiCma);*/ 
+      vlrRentReal=vlrRentReal.toString().replace(".",","); 
+      var ubiPto1=vlrRentReal.toString().lastIndexOf(",");  
+      var longvlrRentReal=vlrRentReal.length;
+      var vlrDos=vlrRentReal.toString().substring(ubiPto1,longvlrRentReal);
+vlrRentReal=new Intl.NumberFormat('en-EN').format(parseFloat(vlrRentReal)).replace(/,/g,".");
+//var ubiPto2=vlrRentReal.toString().lastIndexOf(".");
+
+/*var vlrDos=vlrRentReal.substring(ubiCma,longvlrRentReal);*/
+console.log(vlrRentReal);
+//console.log(vlrUno);
+if(ubiPto1<0)
+{
+  rentabilidadReal.value=vlrRentReal+","+0;
+}
+else
+{
+ rentabilidadReal.value=vlrRentReal+vlrDos; 
+}
+
+}
+
+
+
+
 //FIN JAVASCRIPT PURO
