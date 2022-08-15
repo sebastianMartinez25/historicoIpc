@@ -435,6 +435,17 @@ inflac.addEventListener("paste",prohibido_paste_cut);
 inflac.addEventListener("cut",prohibido_paste_cut);
 inflac.addEventListener("dragstart",prohibido_paste_cut);
 
+rentabilidadReal.addEventListener("paste", prohibido_paste_cut);
+rentabilidadReal.addEventListener("cut", prohibido_paste_cut);
+rentabilidadReal.addEventListener("dragstart", prohibido_paste_cut);
+rentabilidadReal.addEventListener("keydown", prohibido_Backspace);
+
+function prohibido_Backspace(e)
+{
+e.preventDefault();
+alert("NO PUEDE EDITAR ESTE CAMPO, EL RESULTADO SOLO SE MODIFICA CUANDO DA CLICK EN EL BOTÓN CALCULAR");
+
+}
 
 function prohibido_paste_cut(e)
 {
@@ -1012,19 +1023,10 @@ if(valorNegativoDos.childElementCount>0)
 console.log(vlrRent);
 console.log(vlrInflac);
 var vlrRentReal;
-if(vlrRent>=0 || vlrRent>=vlrInflac)
-{
   vlrRentReal=(((1+vlrRent)/(1+vlrInflac)-1)*100).toFixed(5);
-}
-else
-{
-  vlrRentReal=(((1+(vlrRent*-1))*(1+vlrInflac)-1)*100).toFixed(5);
-}
-
 console.log(vlrRentReal);
 //////
       /*var ubiCma=vlrRentReal.indexOf(",");
-      
       var vlrUno=vlrRentReal.substring(0,ubiCma);*/ 
       vlrRentReal=vlrRentReal.toString().replace(".",","); 
       var ubiPto1=vlrRentReal.toString().lastIndexOf(",");  
@@ -1032,7 +1034,6 @@ console.log(vlrRentReal);
       var vlrDos=vlrRentReal.toString().substring(ubiPto1,longvlrRentReal);
 vlrRentReal=new Intl.NumberFormat('en-EN').format(parseFloat(vlrRentReal)).replace(/,/g,".");
 //var ubiPto2=vlrRentReal.toString().lastIndexOf(".");
-
 /*var vlrDos=vlrRentReal.substring(ubiCma,longvlrRentReal);*/
 console.log(vlrRentReal);
 //console.log(vlrUno);
@@ -1044,10 +1045,5 @@ else
 {
  rentabilidadReal.value=vlrRentReal+vlrDos; 
 }
-
 }
-
-
-
-
 //FIN JAVASCRIPT PURO
